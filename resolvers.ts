@@ -18,12 +18,33 @@ export const resolvers = {
             const vDB = await context.FlightsCollection.find( {
                 origen: args.origen,
                 destino: args.destino,
-            })
+            }).toArray()
 
-            return vDB.map((V) => fromModeltoVuelo(V));
+            return vDB.map((v) => fromModeltoVuelo(v) );
 
         }
-        const vDB = await context.FlightsCollection.filter()
+
+        else if (args.origen === null && args.destino != null) {
+            const vDB = await context.FlightsCollection.find( {
+                destino: args.destino,
+            }).toArray()
+
+            return vDB.map((v) => fromModeltoVuelo(v) );
+
+        }
+
+        else if (args.origen != null && args.destino === null) {
+            const vDB = await context.FlightsCollection.find( {
+                origen: args.origen,
+            }).toArray()
+
+            return vDB.map((v) => fromModeltoVuelo(v) );
+
+        }
+
+
+        const vDB = await context.FlightsCollection.find().toArray();
+        return vDB.map((v) => fromModeltoVuelo(v) );
     }
   }
 }
