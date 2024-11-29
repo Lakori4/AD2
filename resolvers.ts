@@ -45,6 +45,20 @@ export const resolvers = {
 
         const vDB = await context.FlightsCollection.find().toArray();
         return vDB.map((v) => fromModeltoVuelo(v) );
+    },
+
+    getFlight: async ( 
+        _:unknown,
+        {id}: {id: string},
+        context:  {FlightsCollection: Collection<VueloModelo>},
+    ): Promise<Vuelo | null> => {
+        const vDB = await context.FlightsCollection.findOne ({
+            _id: new ObjectId(id)
+        })
+        if (!vDB) {
+            return null;
+          }
+          return fromModeltoVuelo(vDB);
     }
   }
 }
